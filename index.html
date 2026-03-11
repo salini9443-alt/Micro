@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Micro Goal</title>
+</head>
+<body>
+
+<h2>Add Goal</h2>
+
+<input type="text" id="title" placeholder="Goal Title">
+<input type="text" id="desc" placeholder="Description">
+<button onclick="addGoal()">Add Goal</button>
+
+<script>
+function addGoal(){
+fetch("http://127.0.0.1:5000/addgoal",{
+method:"POST",
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({
+title:document.getElementById("title").value,
+description:document.getElementById("desc").value
+})
+})
+.then(res=>res.json())
+.then(data=>alert(data.message))
+}
+</script>
+
+</body>
+</html>
