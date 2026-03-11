@@ -1,0 +1,16 @@
+microgoal-project
+│
+├── backend
+│   ├── app.py
+│   ├── database.db
+│   └── requirements.txt
+│
+├── frontend
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+├── database
+│   └── schema.sql
+│
+└── README.md
