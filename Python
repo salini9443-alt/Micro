@@ -1,0 +1,43 @@
+from flask import Flask, request, jsonify
+import sqlite3
+
+app = Flask(__name__)
+
+def get_db():
+    conn = sqlite3.connect('microgoal.db')
+    return conn
+
+@app.route('/addgoal', methods=['POST'])
+def add_goal():
+    data = request.json
+    conn = get_db()
+    conn.execute("INSERT INTO goals (title,description,status) VALUES (?,?,?)",
+                 (data['title'], data['description'], "Pending"))
+    conn.commit()
+    return jsonify({"message": "Goal Added"})
+
+@app.route('/goals', methods=['GET'])
+def get_goals():
+    conn = get_db()
+    cursor = conn.execute("SELECT * FROM goals")
+    goals = cursor.fetchall()
+    return jsonify(goals)
+
+@app.route('/update/<int:id>', methods=['PUT'])
+def update_goal(id):
+    data = request.json
+    conn = get_db()
+    conn.execute("UPDATE goals SET status=? WHERE id=?",
+                 (data['status'], id))
+    conn.commit()
+    return jsonify({"message":"Goal Updated"})
+
+@app.route('/delete/<int:id>', methods=['DELETE'])
+def delete_goal(id):
+    conn = get_db()
+    conn.execute("DELETE FROM goals WHERE id=?", (id,))
+    conn.commit()
+    return jsonify({"message":"Goal Deleted"})
+
+if __name__ == '__main__':
+    app.run(debug=True)
